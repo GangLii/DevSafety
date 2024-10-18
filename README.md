@@ -2,7 +2,6 @@
 
 This repo is to provide implementation of the algorithm proposed in paper [Model Developmental Safety: A Safety-Centric Method and Applications in Vision-Language Models](https://arxiv.org/abs/2410.03955) and reproduce the experimental results.
 
-Credits: The pipline of our code is based on <https://github.com/locuslab/FLYP>. We thank the authors for open sourcing their code.
 
 ## 1. Setup Environment
 * Git clone this repo
@@ -38,7 +37,7 @@ We used 2x40G GPUs for BDD100k experiments, which costs around 12 hours for each
 
 
 
-
+Credits: The pipline of our code is based on <https://github.com/locuslab/FLYP>. We thank the authors for open sourcing their code.
 
 
 ## Contact
