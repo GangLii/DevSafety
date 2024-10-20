@@ -27,14 +27,15 @@ pip install -r requirements.txt
 ## 3. Link Downloaded Files
 Link downloaded files or move downloaded files to corresponding folders. To generate system links to downloaded files, go to the cloned repo folder, and run below commands.
 ```
-ln -s path_to_folder_for_bdd100k/bdd100k               ./datasets/bdd100k
-ln -s path_to_folder_for_places365/places365           ./datasets/places365
-ln -s path_to_folder_for_base_models/base_models       ./datasets/base_models
-ln -s path_to_folder_for_csvs/csvs                     ./datasets/data/csvs
-ln -s path_to_folder_for_laion_foggy/laion_foggy       ./datasets/data/laion_foggy
-ln -s path_to_folder_for_laion_overcast/laion_overcast ./datasets/data/laion_overcast
-ln -s path_to_folder_for_laion_tunnel/laion_tunnel     ./datasets/data/laion_tunnel
-ln -s path_to_folder_for_laion_dressing_room/laion_dressingRoom   ./datasets/data/laion_dressingRoom
+ln -s path_to_folder_for_bdd100k/bdd100k               ./data/datasets/bdd100k
+ln -s path_to_folder_for_places365/places365           ./data/datasets/places365
+ln -s path_to_folder_for_laion_foggy/laion_foggy       ./data/datasets/laion_foggy
+ln -s path_to_folder_for_laion_overcast/laion_overcast ./data/datasets/laion_overcast
+ln -s path_to_folder_for_laion_tunnel/laion_tunnel     ./data/datasets/laion_tunnel
+ln -s path_to_folder_for_laion_dressing_room/laion_dressing_room   ./data/datasets/laion_dressing_room
+ln -s path_to_folder_for_laion_negative/laion_negative   ./data/datasets/laion_negative
+ln -s path_to_folder_for_base_models/base_models       ./data/base_models
+ln -s path_to_folder_for_csvs/csvs                     ./data/csvs
 ```
 
 

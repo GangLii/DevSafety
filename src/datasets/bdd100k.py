@@ -89,9 +89,9 @@ class BDD100k:
         # /data/datasets/BDD100k/bdd100k/images/100k/ + val
         # /data/datasets/BDD100k/bdd100k/labels/det_20/
         if self.task == 'weather':
-            train_csv = pd.read_csv('./datasets/data/csvs/bdd100k/bdd100k_train_train_labels_wea.csv', index_col=0)
+            train_csv = pd.read_csv('./data/csvs/bdd100k/bdd100k_train_train_labels_wea.csv', index_col=0)
         elif self.task == 'scene':
-            train_csv = pd.read_csv('./datasets/data/csvs/bdd100k/bdd100k_train_train_labels_sce.csv', index_col=0)
+            train_csv = pd.read_csv('./data/csvs/bdd100k/bdd100k_train_train_labels_sce.csv', index_col=0)
 
         np.random.seed(2024)
         image_list, labels = [], []
@@ -124,12 +124,12 @@ class BDD100k:
         target_class = self.classnames[self.control_classnames.index('NA')]
         if self.task == 'weather':
             try:
-                train_target = pd.read_csv(os.path.join('./datasets/data/csvs/bdd100k', f'bdd100k_train_{target_class}_labels_wea.csv'), index_col=0)
+                train_target = pd.read_csv(os.path.join('./data/csvs/bdd100k', f'bdd100k_train_{target_class}_labels_wea.csv'), index_col=0)
                 target_paths = train_target['path'].to_list()  #train_csv[train_csv[self.task]=='foggy']['path'].to_list()
             except:
                 target_paths = train_csv[train_csv[self.task]==target_class]['path'].to_list()
         elif self.task == 'scene':
-            train_target = pd.read_csv(os.path.join('./datasets/data/csvs/bdd100k/', f'bdd100k_train_{target_class}_labels_sce.csv'), index_col=0)
+            train_target = pd.read_csv(os.path.join('./data/csvs/bdd100k/', f'bdd100k_train_{target_class}_labels_sce.csv'), index_col=0)
             target_paths = train_target['path'].to_list()            
             
         image_list_plus_target = image_list + target_paths
@@ -148,15 +148,15 @@ class BDD100k:
     def populate_test(self, test_flag):
         if test_flag:
             if self.task=='scene':
-                test_csv = pd.read_csv(os.path.join('./datasets/data/csvs/bdd100k/', f'bdd100k_val_labels_sce.csv'), index_col=0)
+                test_csv = pd.read_csv(os.path.join('./data/csvs/bdd100k/', f'bdd100k_val_labels_sce.csv'), index_col=0)
             else:
-                test_csv = pd.read_csv(os.path.join('./datasets/data/csvs/bdd100k/', f'bdd100k_val_labels_wea.csv'), index_col=0)
+                test_csv = pd.read_csv(os.path.join('./data/csvs/bdd100k/', f'bdd100k_val_labels_wea.csv'), index_col=0)
         else:
             #### validation
             if self.task=='scene':
-                test_csv = pd.read_csv(os.path.join('./datasets/data/csvs/bdd100k/', f'bdd100k_train_val_labels_sce.csv'), index_col=0)
+                test_csv = pd.read_csv(os.path.join('./data/csvs/bdd100k/', f'bdd100k_train_val_labels_sce.csv'), index_col=0)
             else:
-                test_csv = pd.read_csv(os.path.join('./datasets/data/csvs/bdd100k/', f'bdd100k_train_val_labels_wea.csv'), index_col=0)
+                test_csv = pd.read_csv(os.path.join('./data/csvs/bdd100k/', f'bdd100k_train_val_labels_wea.csv'), index_col=0)
  
         ####remove unlabeled samples
         test_csv = test_csv.loc[ test_csv[self.task].isin(self.classnames) ]

@@ -181,7 +181,12 @@ def parse_arguments():
         help=
         "Number of samples in dataset. Required for webdataset if not available in info file.",
     )
-
+    parser.add_argument(
+        "--cache-dir",
+        type=str,
+        default=None,
+        help="Directory for caching features and encoder",
+    )
                         
     parser.add_argument("--seed",
                         type=int,
@@ -214,7 +219,6 @@ def parse_arguments():
         default=1,
         help="Repeated run number",
     )
-
     parser.add_argument(
         "--min-lr",
         type=float,
@@ -227,6 +231,4 @@ def parse_arguments():
 
     parsed_args.device = "cuda" if torch.cuda.is_available() else "cpu"
 
-    if parsed_args.load is not None and len(parsed_args.load) == 1:
-        parsed_args.load = parsed_args.load[0]
     return parsed_args

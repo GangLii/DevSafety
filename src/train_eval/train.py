@@ -46,7 +46,7 @@ def training(args, clip_encoder, logger):
     model = torch.nn.DataParallel(model, device_ids=devices)
     model.train()
 
-    if args.loss in ['sog_class_semi', 'sog_class_semi_rm','sog_class_semi_l1']:
+    if args.loss in ['sog_pnl', 'sog_rm','sog_pnl_l1']:
         ct_dataset_class = getattr(datasets, args.control_dataset)
         print("control dataset class", ct_dataset_class)
         print(f"Control dataset {args.control_dataset}")
@@ -80,7 +80,7 @@ def training(args, clip_encoder, logger):
         assert all_texts.shape[1] == len(template)
         assert all_texts.shape[2] == 77
         
-        if args.loss in ['sog_class', 'sog_class_semi','sog_class_semi_l1']:
+        if args.loss in ['sog_pnl', 'sog_rm','sog_pnl_l1']:
         ####compute previous loss values ahead to avoid dupicated computation
             pre_losses = torch.empty(len(ct_dataset.train_dataset_eval))
             pre_lables = torch.empty(len(ct_dataset.train_dataset_eval), dtype=torch.long)

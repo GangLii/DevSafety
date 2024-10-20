@@ -3,7 +3,7 @@ import json
 
 import torch
 import numpy as np
-from src.models import utils
+from src.train_eval import utils
 from src.datasets.common import get_dataloader, maybe_dictionarize
 import src.datasets as datasets
 import torch.nn.functional as F

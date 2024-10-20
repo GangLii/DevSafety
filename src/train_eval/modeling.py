@@ -3,7 +3,7 @@ import copy
 
 import clip.clip as clip
 
-from src.models import utils
+from src.train_eval import utils
 import open_clip
 
 

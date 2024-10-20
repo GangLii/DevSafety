@@ -10,8 +10,8 @@ import src.templates as templates
 import src.datasets as datasets
 
 from src.args import parse_arguments
-from src.models.modeling import ClassificationHead, CLIPEncoder, ImageClassifier
-from src.models.eval import evaluate
+from src.train_eval.modeling import ClassificationHead, CLIPEncoder, ImageClassifier
+from src.train_eval.eval import evaluate
 
 
 
