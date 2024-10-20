@@ -7,14 +7,14 @@ import tqdm
 import torch
 import pandas as pd
 import clip.clip as clip
-from clip.loss import SogCLR_Penalty, SogCLR_RM,SogCLR_Penalty_l1
+from train_eval.loss import SogCLR_Penalty, SogCLR_RM,SogCLR_Penalty_l1
 
 import src.templates as templates
 from src.args import parse_arguments
 from src.datasets.common import get_dataloader, maybe_dictionarize
-from src.models.eval import evaluate
-from src.models.utils import cosine_lr
-from src.models.zeroshot import get_zeroshot_classifier
+from src.train_eval.eval import evaluate
+from src.train_eval.utils import cosine_lr
+from src.train_eval.zeroshot import get_zeroshot_classifier
 from src.datasets.laion import get_data
 import src.datasets as datasets
 from torch.nn import functional as F
@@ -189,7 +189,7 @@ def training(args, clip_encoder, logger):
                 slabel = label==args.target_class
                 
 
-                if args.loss in ['sog_class_semi', 'sog_class_semi_rm','sog_class_semi_l1']:
+                if args.loss in ['sog_pnl', 'sog_pnl_l1','sog_rm']:
                     try:
                         ct_batch = next(ct_iterator)
                     except StopIteration:
@@ -207,7 +207,7 @@ def training(args, clip_encoder, logger):
                             ct_image, all_texts[:, 0, :].cuda())
                     
                     #loading old ce loss values:
-                    if args.loss in ['sog_class_semi','sog_class_semi_l1']:
+                    if args.loss in ['sog_pnl','sog_pnl_l1']:
                         pre_loss_c = pre_losses[c_ids].cuda()
                         ft_clip_loss = loss_fn(ft_image_features, ft_text_features,image_ids=image_ids, text_ids=text_ids, slabel=slabel, epoch=epoch, 
                                             img_feas_c=ct_image_features, txt_feas_c=ct_text_features, #text_featurec_c[6,emb_dim]
@@ -215,7 +215,7 @@ def training(args, clip_encoder, logger):
                                             index_c=c_ids,
                                             last_loss_c = pre_loss_c,
                                             )
-                    else: #['sog_class_semi_rm',]:                       
+                    else: #['sog_rm',]:                       
                         ft_clip_loss = loss_fn(ft_image_features, ft_text_features,image_ids=image_ids, text_ids=text_ids, slabel=slabel, epoch=epoch, 
                                             img_feas_c=ct_image_features, txt_feas_c=ct_text_features, #text_featurec_c[6,emb_dim]
                                             labels_c = ct_label, #instancewise: [bsz,1]

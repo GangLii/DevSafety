@@ -85,7 +85,7 @@ class Places365:
     
     def populate_train(self):
 
-        train_csv = pd.read_csv(os.path.join(self.location,  'csvs/train_train_v2.csv'), index_col=0)
+        train_csv = pd.read_csv('./datasets/data/csvs/places365/train_train.csv', index_col=0)
 
         np.random.seed(2024)
         image_list, labels = [], []
@@ -135,10 +135,10 @@ class Places365:
     def populate_test(self, test_flag):
 
         if test_flag:
-            test_csv = pd.read_csv(os.path.join(self.location, f'csvs/train_test_v2.csv'), index_col=0)
+            test_csv = pd.read_csv('./datasets/data/csvs/places365/train_test.csv', index_col=0)
         else:
             #### validation
-            test_csv = pd.read_csv(os.path.join(self.location, f'csvs/train_val_v2.csv'), index_col=0)
+            test_csv = pd.read_csv('./datasets/data/csvs/places365/train_val.csv', index_col=0)
         
         image_list = test_csv['path'].values
         for i, cls_name in enumerate(self.classnames):

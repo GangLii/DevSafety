@@ -3,8 +3,8 @@ import os
 import numpy as np
 import torch
 import torch.nn as nn
-from models.train import training
-from src.models.modeling import ClassificationHead, CLIPEncoder
+from train_eval.train import training
+from src.train_eval.modeling import ClassificationHead, CLIPEncoder
 from src.args import parse_arguments
 import logging
 import random

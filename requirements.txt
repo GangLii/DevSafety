@@ -34,7 +34,6 @@ httpcore==1.0.5
 httpx==0.27.0
 huggingface-hub==0.22.2
 idna==3.7
-imagenetv2-pytorch @ git+https://github.com/modestyachts/ImageNetV2_pytorch@14d4456c39fe7f02a665544dd9fc37c1a5f8b635
 ipykernel==6.29.4
 ipython==8.23.0
 ipywidgets==8.1.2

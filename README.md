@@ -18,15 +18,26 @@ pip install -r requirements.txt
 
 ## 2. Datasets and Base Models
 
-1. Download BDD100K dataset from the [website]() and Places365 dataset from [here]()
-2. Download base models for BDD100K experiments from [here](). These models are pretrained on BDD100K dataset.
-3. Download retrieved Laion data from [here]()
-4. Download csvs file from [here](), which contaions data sets splits.
+1. Download BDD100K dataset from the [website](http://bdd-data.berkeley.edu/) and Places365 dataset from [here](https://www.kaggle.com/datasets/nickj26/places2-mit-dataset)
+2. Download base models for BDD100K experiments from [here](https://drive.google.com/drive/folders/1luVLF8iJ3zUtAghNzSBvi3tAFMFGAWb2?usp=sharing). These models are pretrained on BDD100K dataset.
+3. Download retrieved Laion data from [here](https://drive.google.com/drive/folders/1KwBJJ3zXUWUBd6uIImaN2cLngNAfCF0i?usp=drive_link)
+4. Download csvs file for datasets splits from [here](https://drive.google.com/drive/folders/1JMxoN7S5zO5iieSSffWiq5wwRK26Vz68?usp=drive_link).
+5. Unzip all downloaded files
+
+## 3. Link Downloaded Files
+Link downloaded files or move downloaded files to corresponding folders. To generate system links to downloaded files, go to the cloned repo folder, and run below commands.
+```
+ln -s path_to_folder_for_bdd100k/bdd100k               ./datasets/bdd100k
+ln -s path_to_folder_for_places365/places365           ./datasets/places365
+ln -s path_to_folder_for_base_models/base_models       ./datasets/base_models
+ln -s path_to_folder_for_csvs/csvs                     ./datasets/data/csvs
+ln -s path_to_folder_for_laion_foggy/laion_foggy       ./datasets/data/laion_foggy
+ln -s path_to_folder_for_laion_overcast/laion_overcast ./datasets/data/laion_overcast
+ln -s path_to_folder_for_laion_tunnel/laion_tunnel     ./datasets/data/laion_tunnel
+ln -s path_to_folder_for_laion_dressing_room/laion_dressingRoom   ./datasets/data/laion_dressingRoom
+```
 
 
-## 3. Move Downloaded Files
-Move downloaded files to coresponding folders. Specifically,
-* csv.zip -> ./dataset/csvs
 
 ## 4. Run the experiments
 Now, we are ready to run experiments. For example,
@@ -37,7 +48,7 @@ We used 2x40G GPUs for BDD100k experiments, which costs around 12 hours for each
 
 
 
-Credits: The pipline of our code is based on <https://github.com/locuslab/FLYP>. We thank the authors for open sourcing their code.
+Credits: The pipline of our code is based on <https://github.com/locuslab/FLYP>. We thank the authors for making their code publicly available.
 
 
 ## Contact
