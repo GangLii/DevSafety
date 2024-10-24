@@ -154,11 +154,7 @@ def training(args, clip_encoder, logger):
         id_flyp_loss_sum = 0
         model.train()
         model = model.cuda()
-        if epoch != -1: # go to evaluation when epoch==-1
-            # if epoch==0 and args.lora:  ### reset head    
-            #     transformer_width, embed_dim = model.module.model.text_projection.size()
-            #     torch.nn.init.normal_(model.module.model.projection_fn_A[5,:,:], std=transformer_width ** -0.5)
-            #     torch.nn.init.zeros_(model.module.model.projection_fn_B[5,:,:])    #[-1,:,:]                
+        if epoch != -1: # go to evaluation when epoch==-1               
             for i in range(num_batches): 
                 start_time = time.time()
                 step = i + epoch * num_batches
@@ -179,11 +175,11 @@ def training(args, clip_encoder, logger):
                 
                 if args.lora:
                     if args.pseudo_lable_key=='slabel':
-                        ft_image_features, ft_text_features, logit_scale2 = model(
+                        ft_image_features, ft_text_features, _ = model(
                             ft_image, ft_text, 
                             cls_ids= ( (ct_dataset.control_classnames.index('NA')+1)*label -1 ).cuda() )                
                 else:
-                    ft_image_features, ft_text_features, logit_scale2 = model(
+                    ft_image_features, ft_text_features, _ = model(
                         ft_image, ft_text)
                     
                 slabel = label==args.target_class
@@ -206,7 +202,7 @@ def training(args, clip_encoder, logger):
                         ct_image_features, ct_text_features, _ = model(
                             ct_image, all_texts[:, 0, :].cuda())
                     
-                    #loading old ce loss values:
+                    ### load the base model's loss values
                     if args.loss in ['sog_pnl','sog_pnl_l1']:
                         pre_loss_c = pre_losses[c_ids].cuda()
                         ft_clip_loss = loss_fn(ft_image_features, ft_text_features,image_ids=image_ids, text_ids=text_ids, slabel=slabel, epoch=epoch, 
@@ -239,6 +235,7 @@ def training(args, clip_encoder, logger):
         print("loss:", id_flyp_loss_avg)
 
 
+        ####  begin evaluation
         classification_head = get_zeroshot_classifier(
             args, model.module.model)
         classification_head = classification_head.cuda()

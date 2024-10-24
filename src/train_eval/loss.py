@@ -87,27 +87,28 @@ class SogCLR_Penalty(nn.Module):
         
         super(SogCLR_Penalty, self).__init__()
         self.world_size = world_size
-        self.rank = rank        
-        ####sogclr
+        self.rank = rank    
+        self.total_epoch = total_epoch
+        self.eps = torch.finfo(torch.float32).eps
+        self.enable_surrogate = enable_surrogate
+        self.c = surrogate_c # margin parameter for the square hinge loss  
+
+        #### parameters for sogclr
         self.s_I = torch.zeros(N)#.cuda()
         self.s_T = torch.zeros(N)#.cuda()
         # self.b_I = torch.zeros(N).cuda()
         # self.b_T = torch.zeros(N).cuda()
-        self.gamma2 = gamma2
         self.gamma1 = 0.8
         self.temperature = temperature
         self.h_negatives = h_negatives
-        ##########constraint
-        self.count=0
+
+        ##########parameters for constraint
         self.tau = tau
         self.beta = beta
         self.cosine = cosine
         self.u = torch.zeros(num_ct_class).cuda()
-        self.total_epoch = total_epoch
-        
-        self.eps = torch.finfo(torch.float32).eps
-        self.enable_surrogate = enable_surrogate
-        self.c = surrogate_c # margin parameter for the square hinge loss
+        self.gamma2 = gamma2
+
 
     def _sqh(self, x):
         return torch.max(torch.zeros_like(x), x + self.c) ** 2
@@ -132,12 +133,8 @@ class SogCLR_Penalty(nn.Module):
         diag_sim = torch.diagonal(sim)
 
         pos_mask = (slabel == 1).squeeze()
-        
-        #### choose one of them
-        ####1
         pos_image_ids = image_ids[pos_mask]
         pos_text_ids = text_ids[pos_mask]
-
 
         # E_I(x_i)*E_T(t) - E_I(x_i)*E_T(t_i)
         image_diffs = (sim - diag_sim[:, None])[pos_mask,:][:,~pos_mask] ##pos*neg
@@ -169,9 +166,6 @@ class SogCLR_Penalty(nn.Module):
  
         g_I = torch.mean(exp_image_diffs, dim=1, keepdim=True).detach()
         g_T = torch.mean(exp_text_diffs, dim=0, keepdim=True).detach()
-
-        # print("g_I:", g_I.mean())
-        # print("g_T:", g_T.mean())
 
         if epoch == 0:
             s_I = g_I
@@ -214,7 +208,7 @@ class SogCLR_Penalty(nn.Module):
         sum_by_cls = torch.zeros(self.u.shape[0], device=device).scatter_add_(
             0, labels_c,  ce_loss)
         mean_by_cls = sum_by_cls[unique_labels] / labels_count.float()  
-        # loss from last model
+        # loss from base model
         sum_by_cls_last = torch.zeros(self.u.shape[0], device=device).scatter_add_(
             0, labels_c,  last_loss_c)
         mean_by_cls_last = sum_by_cls_last[unique_labels] / labels_count.float() 
@@ -235,6 +229,8 @@ class SogCLR_Penalty(nn.Module):
 
         return contrastive_loss + constraint_loss.mean()
     
+
+
 class SogCLR_Penalty_l1(nn.Module):
     def __init__(self, N=10_000_000, num_ct_class=5, gamma2=0.8, temperature=0.07, 
                  beta = 40, tau = 0.1, total_epoch=40, cosine = False,
@@ -257,7 +253,6 @@ class SogCLR_Penalty_l1(nn.Module):
         self.temperature = temperature
         self.h_negatives = h_negatives
         ##########constraint
-        self.count=0
         self.tau = tau
         self.beta = beta
         self.cosine = cosine
@@ -291,9 +286,6 @@ class SogCLR_Penalty_l1(nn.Module):
         diag_sim = torch.diagonal(sim)
 
         pos_mask = (slabel == 1).squeeze()
-        
-        #### choose one of them
-        ####1
         pos_image_ids = image_ids[pos_mask]
         pos_text_ids = text_ids[pos_mask]
 
@@ -328,8 +320,6 @@ class SogCLR_Penalty_l1(nn.Module):
         g_I = torch.mean(exp_image_diffs, dim=1, keepdim=True).detach()
         g_T = torch.mean(exp_text_diffs, dim=0, keepdim=True).detach()
 
-        # print("g_I:", g_I.mean())
-        # print("g_T:", g_T.mean())
 
         if epoch == 0:
             s_I = g_I
@@ -372,7 +362,7 @@ class SogCLR_Penalty_l1(nn.Module):
         sum_by_cls = torch.zeros(self.u.shape[0], device=device).scatter_add_(
             0, labels_c,  ce_loss)
         mean_by_cls = sum_by_cls[unique_labels] / labels_count.float()  
-        # loss from last model
+        # loss from base model
         sum_by_cls_last = torch.zeros(self.u.shape[0], device=device).scatter_add_(
             0, labels_c,  last_loss_c)
         mean_by_cls_last = sum_by_cls_last[unique_labels] / labels_count.float() 
@@ -420,7 +410,6 @@ class SogCLR_RM(nn.Module):
         self.gamma1 = 0.8
         self.temperature = temperature
         ##########constraint
-        self.count=0
         self.tau = tau
         self.beta = beta
         self.total_epoch = total_epoch
@@ -454,9 +443,6 @@ class SogCLR_RM(nn.Module):
 
 
         pos_mask = (slabel == 1).squeeze()
-        
-        #### choose one of them
-        ####1
         pos_image_ids = image_ids[pos_mask]
         pos_text_ids = text_ids[pos_mask]
 
@@ -492,8 +478,6 @@ class SogCLR_RM(nn.Module):
         g_I = torch.mean(exp_image_diffs, dim=1, keepdim=True).detach()
         g_T = torch.mean(exp_text_diffs, dim=0, keepdim=True).detach()
 
-        # print("g_I:", g_I.mean())
-        # print("g_T:", g_T.mean())
 
         if epoch == 0:
             s_I = g_I

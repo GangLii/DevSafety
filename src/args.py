@@ -12,9 +12,7 @@ def parse_arguments():
         default=None,
         type=lambda x: x.split(","),
         help=
-        "Which datasets to use for evaluation. Split by comma, e.g. CIFAR101,CIFAR102."
-        " Note that same model used for all datasets, so much have same classnames"
-        "for zero shot.",
+        "Which datasets to use for evaluation. Split by comma, e.g. CIFAR101,CIFAR102.",
     )
     
     parser.add_argument(
@@ -30,19 +28,21 @@ def parse_arguments():
     parser.add_argument(
         "--ct-data-location",
         default='/data/datasets/BDD100k/bdd100k/',
-        help="For control dataset to train on",
+        help="path of control dataset to train on",
     )    
 
     parser.add_argument(
         "--ct-batch-size",
         type=int,
         default=50,
+        help="batch size for constraints",
     )
     
     parser.add_argument(
         "--ct-num-cls-per-batch",
         type=int,
         default=5,
+        help="determine how many constraints (or classes) to sample per batch.",
     )
     
     parser.add_argument(
@@ -59,8 +59,6 @@ def parse_arguments():
         "--world-size",
         type=int,
         default=1,
-        help=
-        "Number of samples in dataset. Required for webdataset if not available in info file.",
     )
     parser.add_argument(
         "--sampler",
@@ -77,14 +75,14 @@ def parse_arguments():
     parser.add_argument(
         "--lora-dim",
         type=int, 
-        default=16,
+        default=32,
         )
     parser.add_argument(
         "--ct-sampler",
         default=False,
         action="store_true",
         help=
-        "Whether to use cosine increasing beta"
+        "Whether to use balanced sampler for constraints"
     )
     parser.add_argument(
         "--cosine",
@@ -100,13 +98,13 @@ def parse_arguments():
     parser.add_argument(
         "--target-class",
         type=int,
-        default=5,
+        default=1,
         help="For csv-like datasets, the name of the key for the pseudo-lable.")
     
     parser.add_argument("--tau", type=float, default=0.05, help="temperature for ce loss ")
     parser.add_argument("--beta", type=float, default=100, help="hypter-parameter for contraint penalty ")
     parser.add_argument("--t", type=float, default=0.05, help="temperature for sogclr contrastive loss ")
-    parser.add_argument("--gamma2", type=float, default=0.8, help="hypter-parameter moving average ")
+    parser.add_argument("--gamma2", type=float, default=0.8, help="hypter-parameter for moving average for constraints ")
     parser.add_argument("--h-negatives", type=int, default=1, help="number of hard negatives")
     parser.add_argument("--control-size", type=int, default=1000, help="number of samples from each class used for constraints")
     parser.add_argument("--batchs-per-epoch", type=int, default=0, help="number of batchs for one epoch")
@@ -120,7 +118,7 @@ def parse_arguments():
         type=str,
         default=None,
         help=
-        "Which prompt template is used. Leave as None for linear probe, etc.",
+        "Which prompt template is used.",
     )
 
     
@@ -140,6 +138,7 @@ def parse_arguments():
         "--batch-size",
         type=int,
         default=128,
+        help="batch size for target task",
     )
     parser.add_argument("--lr",
                         type=float,
@@ -163,8 +162,6 @@ def parse_arguments():
         "--save",
         type=str,
         default=None,
-        help=
-        "Optionally save a _classifier_, e.g. a zero shot classifier or probe.",
     )
 
 

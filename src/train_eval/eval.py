@@ -34,7 +34,7 @@ def eval_single_dataset(image_classifier, dataset, args, train_stats, classifica
         top1, correct, n = 0., 0., 0.
         class_correct = [0] *  len(classnames) 
         class_total = [0] * len(classnames)
-        # labels = [i for i in range( len(dataset.classnames) )]
+
         for i, data in batched_data:
 
             data = maybe_dictionarize(data)
@@ -45,19 +45,13 @@ def eval_single_dataset(image_classifier, dataset, args, train_stats, classifica
                 image_paths = data['image_paths']
             
             logits = utils.get_logits(x, model, classification_head) ##use classification head to make prediction
-            projection_fn = getattr(dataset, 'project_logits', None)
-            if projection_fn is not None:
-                logits = projection_fn(logits, device)
-
-            if hasattr(dataset, 'project_labels'):
-                y = dataset.project_labels(y, device)
             preds = logits.argmax(dim=1, keepdim=True)#.to(device) #[batch_size, 1] 
             
-            # #####################
+            ##### accumulatation for evaluation metrics
             correct += preds.eq(y.view_as(preds)).sum().item()
             n += y.size(0)
 
-            # print('label',label,'y',y)
+            ## each class
             y = y.detach().cpu().reshape(-1)
             preds = preds.detach().cpu().reshape(-1)
             for label in y:

@@ -42,7 +42,7 @@ def get_zeroshot_classifier(args, clip_model):
             texts = clip.tokenize(texts).to(device)  # tokenize
             if args.lora:
                 embeddings = clip_model.encode_text(
-                    texts, cls_ids = torch.tensor([cls_id]))  # embed with text encoder   #[80,512] [num_templates, 512] #[7,512]
+                    texts, cls_ids = torch.tensor([cls_id]))  # embed with text encoder 
             else:
                 embeddings = clip_model.encode_text(
                     texts)  # embed with text encoder                
@@ -62,9 +62,6 @@ def get_zeroshot_classifier(args, clip_model):
     classification_head = ClassificationHead(normalize=True,
                                              weights=zeroshot_weights)
     
-    classification_head_params = list(classification_head.parameters())
-
-
     return classification_head
 
 
