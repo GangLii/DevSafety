@@ -1,6 +1,6 @@
-# Model Developmental Safety: A Safety-Centric Method and Applications in Vision-Language Models
+# Model Developmental Safety: A Retention-Centric Method and Applications in Vision-Language Models
 
-This repo is to provide implementation of the algorithm proposed in paper [Model Developmental Safety: A Safety-Centric Method and Applications in Vision-Language Models](https://arxiv.org/abs/2410.03955) and reproduce the experimental results.
+This repo is to provide implementation of the algorithm proposed in paper [Model Developmental Safety: A Retention-Centric Method and Applications in Vision-Language Models](https://arxiv.org/abs/2410.03955) and reproduce the experimental results.
 
 
 ## 1. Setup Environment
